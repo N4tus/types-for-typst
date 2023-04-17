@@ -63,16 +63,16 @@
 #let TLit(lit) = t_type_def("literal(" + str(lit) + ")", v => v == lit)
 
 
-#let TArray(ty) = (
+#let TArray(values) = (
   name: "array" + _surround(ty.name),
   check: value => {
     if type(value) != "array" {
       return ("Value is no array",)
     }
     let errs = value.enumerate()
-      .map(e => (e.at(0), (ty.check)(e.at(1))))
+      .map(e => (e.at(0), (values.check)(e.at(1))))
       .filter(e => e.at(1).len() > 0)
-      .map(e => ("Value at index " + str(e.at(0)) + " does not match '" + ty.name + "'",) + e.at(1).map(err => " -> " + err))
+      .map(e => ("Value at index " + str(e.at(0)) + " does not match '" + values.name + "'",) + e.at(1).map(err => " -> " + err))
     if errs.len() == 0 {
       ()
     } else {
