@@ -64,7 +64,7 @@
 
 
 #let TArray(values) = (
-  name: "array" + _surround(ty.name),
+  name: "array" + _surround(values.name),
   check: value => {
     if type(value) != "array" {
       return ("Value is no array",)
