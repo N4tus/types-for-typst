@@ -2,10 +2,9 @@
 A small library for building and checking types in typst.
 
 # Documention
-- `t_assert(type, value)` panics if the given value is not of the specified type. If it is it returns the value unchanged.  
-- `t_check(type, value)` checks if the given value if of the specified type and returns `true` if it is.
-- `t_or(..types)` constructs a union type of all given types.
-
+- `t_assert(type, value)` panics if the given value is not of the specified type. If it is it returns the value unchanged
+- `t_check(type, value)` checks if the given value if of the specified type and returns `true` if it is
+- `t_or(..types)` constructs a union type of all given types
 - `TBoolean` primtive type
 - `TInteger` primtive type
 - `TFloat` primtive type
@@ -19,10 +18,8 @@ A small library for building and checking types in typst.
 - `TString` primtive type
 - `TContent` primtive type
 - `TFunction` primtive type
-
 - `TNumber` or combination of `TInteger` and `TFloat`
 - `TLit(lit)` literal type. Allowes only the given literal as type.
-
 - `TMap(values)` generic map from string to `value`
 - `TDict(..fields)` generic dictionary with the given fields. Only named fields are allowed
 - `TArray(values)` generic array with zero or more values of one type
