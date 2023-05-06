@@ -84,8 +84,7 @@
   }
 )
 
-#let optional(ty, optional) = (ty: ty, optional: true)
-
+#let optional(ty) = (ty: ty, optional: true)
 
 #let TDict(..fields) = {
   let fields = fields.named().pairs().map(f => {let d = (:); d.insert(f.at(0), if type(f.at(1)) == "dictionary" and f.at(1).len() == 2 and "ty" in f.at(1) and "optional" in f.at(1) {f.at(1)} else {(ty: f.at(1), optional: false)}); d}).join()
