@@ -8,7 +8,7 @@
 
 #let t_check(ty, val) = {
   let err = (ty.check)(val)
-  err.len() > 0
+  err.len() == 0
 }
 
 #let t_type_def(t_name, t_check) = ( 
