@@ -84,8 +84,12 @@
   }
 )
 
+#let optional(ty, optional) = (ty: ty, optional: true)
+
+
 #let TDict(..fields) = {
-  let n = "dict(" + fields.named().pairs().map(entry => entry.at(0) + ": " + entry.at(1).name).join(", ") + ")"
+  let fields = fields.named().pairs().map(f => {let d = (:); d.insert(f.at(0), if type(f.at(1)) == "dictionary" and f.at(1).len() == 2 and "ty" in f.at(1) and "optional" in f.at(1) {f.at(1)} else {(ty: f.at(1), optional: false)}); d}).join()
+  let n = "dict(" + fields.pairs().map(entry => entry.at(0) + if entry.at(1).optional {"?"} + ": " + entry.at(1).ty.name).join(", ") + ")"
   (
     name: n,
     check: value => {
@@ -94,24 +98,26 @@
       }
 
       // check missing and wrong fields
-      let fields = fields.named()
       let errs = fields.pairs().map(e => {
-        if not e.at(0) in value { 
-          (e.at(0), ("Missing field '" + e.at(0) + "' in dict with type '" + e.at(1).name + "'",)) 
+        let name = e.at(0)
+        let e = e.at(1)
+        if e.optional and not name in value {
+          (name: name, errs: ())
+        } else if not name in value { 
+          (name: name, errs: ("Missing required field '" + name + "' in dict with type '" + e.ty.name + "'",)) 
         } else {
-          let v = value.at(e.at(0))
           (
-            e.at(0),
-            (e.at(1).check)(v),
-            e.at(1).name
+            name: name,
+            errs: (e.ty.check)(value.at(name)),
+            ty_name: e.ty.name
           )
         }
       })
-      .filter(e => e.at(1).len() > 0)
+      .filter(e => e.errs.len() > 0)
       .map(e => if e.len() == 3 {
-        ("Value at key '" + e.at(0) + "' does not match '" + e.at(2) + "'",) + e.at(1).map(err => " -> " + err)
+        ("Value at key '" + e.name + "' does not match '" + e.ty_name + "'",) + e.errs.map(err => " -> " + err)
       } else {
-        e.at(1)
+        e.errs
       })
       
       // check extra fields
