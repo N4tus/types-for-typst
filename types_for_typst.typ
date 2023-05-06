@@ -45,6 +45,8 @@
   )
 }
 
+#let TAny            = t_type_def("any", _v => true)
+
 #let TBoolean        = _primitive_def("boolean")
 #let TInteger        = _primitive_def("integer")
 #let TFloat          = _primitive_def("float")
@@ -59,8 +61,9 @@
 #let TContent        = _primitive_def("content")
 #let TFunction       = _primitive_def("function")
 
-#let TNumber = t_or(TInteger, TFloat)
+#let TNumber   = t_or(TInteger, TFloat)
 #let TLit(lit) = t_type_def("literal(" + str(lit) + ")", v => v == lit)
+#let TNone     = t_type_def("none", v => v == none)
 
 
 #let TArray(values) = (
