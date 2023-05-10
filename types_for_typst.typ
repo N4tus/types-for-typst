@@ -3,12 +3,19 @@
   if err.len() > 0 {
     panic("Value does not match '" + ty.name + "'", err, val)
   }
-  val
 }
 
 #let t_check(ty, val) = {
   let err = (ty.check)(val)
   err.len() == 0
+}
+
+#let t_require(ty, val) = {
+  let err = (ty.check)(val)
+  if err.len() > 0 {
+    panic("Value does not match '" + ty.name + "'", err, val)
+  }
+  val
 }
 
 #let t_type_def(t_name, t_check) = ( 
